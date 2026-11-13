@@ -21,8 +21,15 @@ jobs:
       - name: Prepare directories
         run: |
           mkdir %userprofile%\TBuild\Libraries
+          mkdir %userprofile%\TBuild\ThirdParty
           mklink /d %GITHUB_WORKSPACE%\TBuild %userprofile%\TBuild
           echo TBUILD=%GITHUB_WORKSPACE%\TBuild>>%GITHUB_ENV%
+
+      - name: Set up MSYS2 tools
+        run: |
+          copy /Y "C:\msys64\usr\bin\pacman.exe" "%userprofile%\TBuild\ThirdParty\" 2>nul || ver >nul
+          C:\msys64\usr\bin\pacman.exe -S --noconfirm --needed make gperf nasm perl pkgconf diffutils
+          mklink /d "%userprofile%\TBuild\ThirdParty\msys64" "C:\msys64"
 
       - name: Get repository name
         shell: bash
@@ -50,14 +57,6 @@ jobs:
         run: |
           nuget sources Disable -Name "Microsoft Visual Studio Offline Packages"
           nuget sources Add -Source https://api.nuget.org/v3/index.json & exit 0
-
-      - name: ThirdParty cache
-        id: cache-third-party
-        uses: actions/cache@v4
-        with:
-          path: ${{ env.TBUILD }}\ThirdParty
-          key: ${{ runner.OS }}-x64-third-party-${{ env.CACHE_KEY }}
-          restore-keys: ${{ runner.OS }}-x64-third-party-
 
       - name: Libraries cache
         id: cache-libs

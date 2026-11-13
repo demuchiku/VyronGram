@@ -1,9 +1,9 @@
-#define MyAppShortName "AyuGram"
-#define MyAppName "AyuGram Desktop"
-#define MyAppPublisher "Radolyn Labs"
-#define MyAppURL "https://github.com/AyuGram"
-#define MyAppExeName "AyuGram.exe"
-#define MyAppId "53F49750-6209-4FBF-9CA8-7A333C87D666"
+#define MyAppShortName "VyronGram"
+#define MyAppName "VyronGram Desktop"
+#define MyAppPublisher "Vyron"
+#define MyAppURL "https://github.com/demuchiku/VyronGram"
+#define MyAppExeName "VyronGram.exe"
+#define MyAppId "BBED7AED-91BF-4F76-94E6-3754812435B6"
 #define CurrentYear GetDateTimeString('yyyy','','')
 
 [Setup]

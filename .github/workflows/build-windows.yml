@@ -73,7 +73,7 @@ jobs:
           GYP_MSVS_VERSION: 2022
         run: |
           cd %TBUILD%
-          %REPO_NAME%\Telegram\build\prepare\win.bat skip-release silent
+          %REPO_NAME%\Telegram\build\prepare\win.bat silent
 
       - name: Free up disk space
         run: |
@@ -81,6 +81,20 @@ jobs:
           del /S Libraries\*.pdb
           del /S Libraries\*.pch
           del /S Libraries\*.obj
+
+      - name: Save Libraries cache early
+        uses: actions/cache/save@v4
+        if: steps.cache-libs.outputs.cache-hit != 'true'
+        with:
+          path: ${{ env.TBUILD }}\Libraries
+          key: ${{ runner.OS }}-x64-libs-${{ env.CACHE_KEY }}
+
+      - name: Save ThirdParty cache early
+        uses: actions/cache/save@v4
+        if: steps.cache-third-party.outputs.cache-hit != 'true'
+        with:
+          path: ${{ env.TBUILD }}\ThirdParty
+          key: ${{ runner.OS }}-x64-third-party-${{ env.CACHE_KEY }}
 
       - name: Build VyronGram
         run: |

@@ -114,6 +114,15 @@ void InstallTestAgentCrashHandling() {
 
 Launcher::Launcher(int argc, char *argv[])
 : Core::Launcher(argc, argv) {
+#ifdef _DEBUG
+	// Disable MSVC Debug Assert modal dialogs and report to stderr instead.
+	// This prevents Qt debug assertions (e.g. QFontDatabase::ensurePopulated)
+	// from halting the app on launch.
+	for (const auto type : { _CRT_WARN, _CRT_ERROR, _CRT_ASSERT }) {
+		_CrtSetReportMode(type, _CRTDBG_MODE_FILE);
+		_CrtSetReportFile(type, _CRTDBG_FILE_STDERR);
+	}
+#endif // _DEBUG
 }
 
 void Launcher::initHook() {

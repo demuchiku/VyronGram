@@ -97,18 +97,21 @@ jobs:
           key: ${{ runner.OS }}-x64-third-party-${{ env.CACHE_KEY }}
 
       - name: Build VyronGram
+        env:
+          PreferredToolArchitecture: x64
         run: |
           cd %TBUILD%\%REPO_NAME%\Telegram
 
           call configure.bat ^
           x64 ^
+          -D CMAKE_VS_PLATFORM_TOOLSET_HOST_ARCHITECTURE=x64 ^
           -D TDESKTOP_API_ID=2040 ^
           -D TDESKTOP_API_HASH=b18441a1ff607e10a989891a5462e627 ^
           -D CMAKE_CONFIGURATION_TYPES=Release ^
           -D DESKTOP_APP_DISABLE_AUTOUPDATE=ON ^
           -D DESKTOP_APP_DISABLE_CRASH_REPORTS=ON
 
-          cmake --build ..\out --config Release --parallel
+          cmake --build ..\out --config Release --parallel 2
 
       - name: Package Binary
         run: |

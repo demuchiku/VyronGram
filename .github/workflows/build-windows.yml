@@ -104,24 +104,25 @@ jobs:
 
           call configure.bat ^
           x64 ^
+          debug ^
           -D CMAKE_VS_PLATFORM_TOOLSET_HOST_ARCHITECTURE=x64 ^
           -D TDESKTOP_API_ID=2040 ^
           -D TDESKTOP_API_HASH=b18441a1ff607e10a989891a5462e627 ^
-          -D CMAKE_CONFIGURATION_TYPES=Release ^
+          -D CMAKE_CONFIGURATION_TYPES=Debug ^
           -D DESKTOP_APP_DISABLE_AUTOUPDATE=ON ^
           -D DESKTOP_APP_DISABLE_CRASH_REPORTS=ON
 
-          cmake --build ..\out --config Release --parallel 2
+          cmake --build ..\out --config Debug --parallel 2
 
       - name: Package Binary
         run: |
-          set OUT=%TBUILD%\%REPO_NAME%\out\Release
-          mkdir %GITHUB_WORKSPACE%\VyronGram-Release
-          copy %OUT%\VyronGram.exe %GITHUB_WORKSPACE%\VyronGram-Release\ || copy %OUT%\Telegram.exe %GITHUB_WORKSPACE%\VyronGram-Release\VyronGram.exe
-          if exist %OUT%\Updater.exe copy %OUT%\Updater.exe %GITHUB_WORKSPACE%\VyronGram-Release\
+          set OUT=%TBUILD%\%REPO_NAME%\out\Debug
+          mkdir %GITHUB_WORKSPACE%\VyronGram-Debug
+          copy %OUT%\VyronGram.exe %GITHUB_WORKSPACE%\VyronGram-Debug\ || copy %OUT%\Telegram.exe %GITHUB_WORKSPACE%\VyronGram-Debug\VyronGram.exe
+          if exist %OUT%\Updater.exe copy %OUT%\Updater.exe %GITHUB_WORKSPACE%\VyronGram-Debug\
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: VyronGram-Windows-x64
-          path: ${{ github.workspace }}\VyronGram-Release\
+          name: VyronGram-Windows-x64-Debug
+          path: ${{ github.workspace }}\VyronGram-Debug\

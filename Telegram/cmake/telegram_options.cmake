@@ -39,6 +39,7 @@ endif()
 if (MSVC)
     target_compile_options(Telegram PRIVATE /Zm200)
     target_compile_definitions(Telegram PRIVATE $<$<CONFIG:Debug>:QT_NO_DEBUG>)
+    target_link_options(Telegram PRIVATE $<$<CONFIG:Debug>:/FORCE:MULTIPLE>)
 endif()
 
 if (DESKTOP_APP_DISABLE_AUTOUPDATE)

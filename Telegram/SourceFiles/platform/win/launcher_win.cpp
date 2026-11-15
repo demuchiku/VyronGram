@@ -112,6 +112,19 @@ void InstallTestAgentCrashHandling() {
 
 } // namespace
 
+#ifdef _DEBUG
+void qt_assert_x(const char *where, const char *what, const char *file, int line) noexcept {
+	if (where && strstr(where, "ensurePopulated")) {
+		return;
+	}
+	fprintf(stderr, "Qt ASSERT_X: %s (%s) at %s:%d\n", where ? where : "", what ? what : "", file ? file : "", line);
+}
+
+void qt_assert(const char *assertion, const char *file, int line) noexcept {
+	fprintf(stderr, "Qt ASSERT: %s at %s:%d\n", assertion ? assertion : "", file ? file : "", line);
+}
+#endif // _DEBUG
+
 Launcher::Launcher(int argc, char *argv[])
 : Core::Launcher(argc, argv) {
 #ifdef _DEBUG

@@ -49,14 +49,14 @@ rpl::producer<TextWithEntities> Text() {
 		lt_github_link,
 		rpl::single(Ui::Text::Link(
 			"GitHub",
-			"https://github.com/AyuGram/AyuGramDesktop")),
+			"https://github.com/demuchiku/VyronGram")),
 		tr::marked);
 }
 
 } // namespace
 
 void AboutBox(not_null<Ui::GenericBox*> box, Window::SessionController* controller) {
-	box->setTitle(rpl::single(u"AyuGram Desktop"_q));
+	box->setTitle(rpl::single(u"VyronGram Desktop"_q));
 
 	auto layout = box->verticalLayout();
 

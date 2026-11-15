@@ -2,6 +2,7 @@
 
 #include "ayu/libs/json.hpp"
 #include "core/application.h"
+#include "core/version.h"
 
 #include <QtCore/QDir>
 #include <QtCore/QFile>
@@ -158,7 +159,7 @@ void PluginManager::unloadAll() {
 		}
 		plugin.loaded = false;
 	}
-	if (auto app = QApplication::instance()) {
+	if (const auto app = qobject_cast<QApplication*>(QCoreApplication::instance())) {
 		app->setStyleSheet(QString());
 	}
 }
@@ -195,7 +196,7 @@ void PluginManager::loadEnabledPlugins() {
 	}
 
 	if (!combinedStyles.isEmpty()) {
-		if (auto app = QApplication::instance()) {
+		if (const auto app = qobject_cast<QApplication*>(QCoreApplication::instance())) {
 			app->setStyleSheet(combinedStyles);
 		}
 	}

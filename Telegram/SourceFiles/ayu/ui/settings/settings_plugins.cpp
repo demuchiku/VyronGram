@@ -13,7 +13,6 @@
 #include "ui/toast/toast.h"
 #include "ui/vertical_list.h"
 #include "ui/widgets/buttons.h"
-#include "ui/widgets/labels.h"
 #include "ui/wrap/vertical_layout.h"
 #include "window/window_session_controller.h"
 
@@ -53,29 +52,18 @@ void BuildPluginControls(SectionBuilder &builder) {
 	builder.addSkip();
 }
 
-void BuildPluginList(SectionBuilder &builder) {
+void BuildPluginList(SectionBuilder &builder, AyuSectionBuilder &ayu) {
 	const auto &plugins = Vyron::PluginManager::Instance().plugins();
 	if (plugins.empty()) {
-		builder.add([](const BuildContext &ctx) {
-			v::match(ctx, [&](const WidgetContext &wctx) {
-				const auto container = wctx.container;
-				AddSkip(container);
-				const auto label = container->add(
-					object_ptr<Ui::FlatLabel>(
-						container,
-						rpl::single(u"No external plugins found in plugins folder.\nAdd plugins with plugin.json or .qss stylesheets."_q),
-						st::boxLabel));
-				label->setTextColorOverride(st::windowSubTextFg->c);
-				AddSkip(container);
-			});
-		});
+		builder.addDividerText(rpl::single(
+			u"No external plugins found in plugins folder.\nAdd plugins with plugin.json or .qss stylesheets."_q));
 		return;
 	}
 
 	for (const auto &plugin : plugins) {
 		const auto id = plugin.id;
 		const auto nameWithVer = plugin.name + u" v"_q + plugin.version;
-		builder.addToggle({
+		ayu.addToggle({
 			.id = u"vyron/plugin_"_q + id,
 			.title = rpl::single(nameWithVer),
 			.getter = [=] {
@@ -96,13 +84,15 @@ const auto kMeta = BuildHelper({
 	.title = u"Plugins"_q,
 	.icon = &st::menuIconManage,
 }, [](SectionBuilder &builder) {
+	auto ayu = AyuSectionBuilder(builder);
+
 	builder.addSkip();
 	builder.addSubsectionTitle(rpl::single(u"External Plugins"_q));
 	BuildPluginControls(builder);
 	builder.addDivider();
 	builder.addSkip();
 	builder.addSubsectionTitle(rpl::single(u"Installed Plugins"_q));
-	BuildPluginList(builder);
+	BuildPluginList(builder, ayu);
 });
 
 } // namespace
